@@ -1,0 +1,51 @@
+package task15
+
+fun fail(message: String): Nothing = throw IllegalStateException(message)
+
+fun discountFor(code: String): Int = when (code.uppercase()) {
+    "STUDENT" -> 20
+    "FRIEND" -> 10
+    else -> fail("Unknown coupon '$code'")
+}
+
+fun runCalculator(): Nothing {
+    var total = 0
+    while (true) {
+        print("> ")
+        val parts = readln().trim().split(" ")
+        val number = parts.getOrNull(1)?.toIntOrNull()
+        when (parts[0]) {
+            "add" -> total += number ?: 0
+            "sub" -> total -= number ?: 0
+            "mul" -> total *= number ?: 1
+            "reset" -> total = 0
+            "show" -> println("Total = $total")
+            "exit" -> {
+                println("Bye, final total = $total")
+                return fail("Calculator stopped by user")
+            }
+            else -> println("Unknown command '${parts[0]}'")
+        }
+    }
+}
+
+fun main() {
+    print("Coupon: ")
+    try {
+        println("Discount: ${discountFor(readln().trim())}%")
+    } catch (e: IllegalStateException) {
+        println(e.message)
+    }
+
+    val none: List<Nothing> = emptyList()
+    val names: List<String> = none
+    val ages: List<Int> = none
+    println("${names.size} names, ${ages.size} ages")
+
+    println("Commands: add N, sub N, mul N, reset, show, exit")
+    try {
+        runCalculator()
+    } catch (e: IllegalStateException) {
+        println(e.message)
+    }
+}
